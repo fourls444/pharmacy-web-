@@ -84,7 +84,8 @@ export default function DeliveryPage({
         footerMeta={{ title: module.title }}
         footerActions={[
           {
-            label: "กลับไปหน้าประวัติ",
+            label: "ย้อนกลับ",
+            back: true,
             href: `/service/e-service/${module.slug}/history`,
             variant: "ghost",
           },

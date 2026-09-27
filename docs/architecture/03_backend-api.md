@@ -20,7 +20,7 @@
 | File | Purpose |
 | --- | --- |
 | `package.json` | scripts และ dependency ของ API |
-| `drizzle.config.ts` | Drizzle migration/schema config |
+| `drizzle.config.ts` | Drizzle Kit schema config |
 | `tsconfig.json` | TypeScript config |
 | `src/server.ts` | entry point ของ Fastify server |
 
@@ -50,9 +50,14 @@
 | `JWT_SECRET` | `server.ts`, JWT plugin | sign/verify token |
 | `DATABASE_URL` | `db/index.ts`, `drizzle.config.ts` | PostgreSQL connection |
 | `FRONTEND_URL` | CORS config | allow origin production |
+| `PHARMACY_ASSERTION_PUBLIC_JWK` | `utils/pharmacyAssertion.ts` | public Ed25519 JWK สำหรับตรวจ Pharmacy session assertion ที่เว็บหน้าบ้านลงนาม |
+| `PHARMACY_ASSERTION_KEY_ID` | `utils/pharmacyAssertion.ts` | key id ที่ต้องตรงกับ assertion signer |
+| `PHARMACY_ASSERTION_ISSUER` | `utils/pharmacyAssertion.ts` | issuer ของ session assertion, ค่าเริ่มต้น `pharmacy-web` |
+| `ACADEMY_MOCK_PAYMENTS_ENABLED` | `routes/academy.ts` | ปิด/เปิดปุ่มจำลองชำระเงิน; ปิดเป็นค่าเริ่มต้นใน production |
 | Supabase URL/key variables | `utils/supabase.ts` | storage upload/delete/read |
 
 ไม่ควร commit secret จริงลง repository
+ใน production ต้องตั้ง `PHARMACY_ASSERTION_PUBLIC_JWK` และ key id ให้ตรงกับ signer; API ปฏิเสธ Pharmacy assertion หากไม่ตั้ง public key
 
 ## Database layer
 
@@ -79,6 +84,7 @@
 | `agencies` | หน่วยงาน/เครือข่าย |
 | `council_members` | กรรมการสภา |
 | `council_history` | ทำเนียบ/ประวัติ |
+| `academy_*` | หมวดหมู่ คอร์ส ผู้เรียน คำสั่งซื้อ และการลงทะเบียน Pharmacy Academy |
 | `honor_awards` | ประเภทรางวัลเกียรติประวัติ |
 | `honors` | ผู้ได้รับรางวัล |
 | `pharmacists` | รายชื่อเภสัชกร |
@@ -88,6 +94,8 @@
 | `request_tax_invoices` | ข้อมูลใบกำกับภาษี |
 | `policy_categories` | หมวดนโยบาย |
 | `policy_projects` | โครงการภายใต้นโยบาย |
+
+เพิ่มหรือเปลี่ยน schema ให้ตรวจ diff แล้วใช้ `npm run db:push` ตาม workflow ปัจจุบันของ API; คำสั่งนี้ยังไม่ได้รันกับฐานข้อมูลในงานนี้
 
 ## Auth and permission guard
 

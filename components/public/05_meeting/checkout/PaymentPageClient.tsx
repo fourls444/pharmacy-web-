@@ -7,6 +7,7 @@ import { cancelOrder, ConferenceApiError, confirmMockPayment, createPaymentAttem
 import { formatMoney } from "@/lib/conference/checkout";
 import { ensureConferenceSession } from "@/lib/conference/session";
 import type { CheckoutOrder, PaymentAttempt } from "@/lib/conference/types";
+import { useBackNavigation } from "@/components/ui/useBackNavigation";
 import { CheckoutProgress } from "./CheckoutProgress";
 import { FlowError, FlowLoading } from "./CheckoutPageClient";
 import styles from "./checkout-flow.module.css";
@@ -19,6 +20,7 @@ function countdownText(seconds: number) {
 
 export function PaymentPageClient({ eventId, orderId }: { eventId: string; orderId: string }) {
   const router = useRouter();
+  const goBack = useBackNavigation(`/meeting/${eventId}`);
   const [order, setOrder] = useState<CheckoutOrder | null>(null);
   const [attempt, setAttempt] = useState<PaymentAttempt | null>(null);
   const [secondsLeft, setSecondsLeft] = useState(0);
@@ -124,7 +126,7 @@ export function PaymentPageClient({ eventId, orderId }: { eventId: string; order
   return <main className={`${styles.page} ThaiFont`}>
     <div className={`${styles.shell} ${styles.paymentShell}`}>
       <header className={styles.flowHeader}>
-        <button type="button" className={styles.backLink} onClick={() => router.push(`/meeting/${eventId}`)}><ChevronLeft size={19} />กลับไปดูรายละเอียดงาน</button>
+        <button type="button" className={styles.backLink} onClick={goBack}><ChevronLeft size={19} />ย้อนกลับ</button>
         <CheckoutProgress current="payment" />
       </header>
       <div className={styles.paymentGrid}>

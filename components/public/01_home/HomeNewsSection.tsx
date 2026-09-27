@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import ViewAllLink from '@/components/ui/ViewAllLink';
 import FeaturedNews from "@/components/public/06_news/FeaturedNews";
 import styles from "./HomeNewsSection.module.css";
 import { News, NewsCategory } from "@/lib/api";
@@ -88,10 +88,7 @@ export default function HomeNewsSection({
         <div className={styles.newsListSection}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>ข่าวสาร</h2>
-            <Link href="/news" className={styles.viewAll}>
-              ดูทั้งหมด
-              <ArrowRight size={18} strokeWidth={2} />
-            </Link>
+            <ViewAllLink href="/news" />
           </div>
 
           {newsList.length > 0 ? (

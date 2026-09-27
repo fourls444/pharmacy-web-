@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import Link from "next/link";
+import BackLink from "@/components/ui/BackLink";
 import { useParams, useSearchParams } from "next/navigation";
 import { ChevronLeft, Loader2 } from "lucide-react";
 import PharmacistDetailCard from "@/components/public/01_home/PharmacistDetailCard";
@@ -26,10 +27,10 @@ function LicenseSearchDetailInner() {
   if (!item) {
     return (
       <div className={pageStyles.pageInner}>
-        <Link href={backHref} className={pageStyles.backBtn}>
+        <BackLink href={backHref} className={pageStyles.backBtn}>
           <ChevronLeft size={18} />
-          <span>ย้อนกลับผลการค้นหา</span>
-        </Link>
+          <span>ย้อนกลับ</span>
+        </BackLink>
         <div className={styles.emptyCard}>
           <h4 className={styles.emptyTitle}>ไม่พบข้อมูล</h4>
           <p className={styles.emptySubtitle}>
@@ -45,10 +46,10 @@ function LicenseSearchDetailInner() {
 
   return (
     <div className={pageStyles.pageInner}>
-      <Link href={backHref} className={pageStyles.backBtn}>
+      <BackLink href={backHref} className={pageStyles.backBtn}>
         <ChevronLeft size={18} />
-        <span>ย้อนกลับผลการค้นหา</span>
-      </Link>
+        <span>ย้อนกลับ</span>
+      </BackLink>
 
       <div className={styles.resultsContainer}>
         <h3 className={styles.resultTitle}>รายละเอียดผู้ประกอบวิชาชีพ</h3>

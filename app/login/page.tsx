@@ -258,7 +258,7 @@ export default function LoginPage() {
                   }}
                 >
                   <ChevronLeft size={20} />
-                  <span>กลับหน้าเข้าสู่ระบบ</span>
+                  <span>ย้อนกลับ</span>
                 </div>
               </div>
             )}

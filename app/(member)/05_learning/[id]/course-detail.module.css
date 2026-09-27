@@ -1,0 +1,372 @@
+.page,
+.state {
+    min-height: 70vh;
+    background: #fdfdfa;
+    color: #1f2937;
+}
+
+.state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 4rem 1.5rem;
+}
+
+.container {
+    max-width: var(--max-width-xl);
+    width: 90%;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+}
+
+.backRow {
+    padding: 1.1rem 0 1.3rem;
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+}
+
+.cover {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1.14 / 1;
+    overflow: hidden;
+    border-radius: 1.3rem;
+    background: #eff0e7;
+}
+
+.cover img {
+    object-fit: cover;
+}
+
+.coverPlaceholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--primary-olive);
+}
+
+.content {
+    min-width: 0;
+    padding: 0.2rem 0;
+}
+
+.labels {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 1rem;
+}
+
+.category,
+.format {
+    display: inline-flex;
+    align-items: center;
+    min-height: 29px;
+    padding: 0.2rem 0.7rem;
+    border-radius: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 650;
+}
+
+.category {
+    background: #eff0e1;
+    color: #5b5d00;
+}
+
+.format {
+    background: #f1f2ef;
+    color: #4b5563;
+}
+
+.content h1 {
+    max-width: 30ch;
+    margin: 0;
+    color: #202a32;
+    font-size: clamp(1.9rem, 2.6vw, 2.55rem);
+    font-weight: 750;
+    line-height: 1.35;
+}
+
+.summary {
+    max-width: 65ch;
+    margin: 1rem 0 0;
+    color: #59616c;
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+.facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.4rem;
+    margin-top: 1.5rem;
+    color: #4b5563;
+    font-size: 0.93rem;
+}
+
+.facts span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.facts svg {
+    flex: none;
+    color: var(--primary-olive);
+}
+
+.enrollPanel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(235px, 1.1fr);
+    align-items: center;
+    column-gap: 1.4rem;
+    row-gap: 0.4rem;
+    margin-top: 1.8rem;
+    padding: 1.25rem;
+    border: 1px solid #e4e7d8;
+    border-radius: 1rem;
+    background: #f7f8f1;
+}
+
+.panelLabel {
+    margin: 0;
+    color: #68707b;
+    font-size: 0.86rem;
+}
+
+.price {
+    margin: 0.15rem 0 0;
+    color: #202a32;
+    font-size: 1.7rem;
+    font-weight: 750;
+    line-height: 1.3;
+}
+
+.enrollAction {
+    min-width: 0;
+}
+
+.enrollButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 48px;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--primary-olive);
+    border-radius: 0.7rem;
+    background: var(--primary-olive);
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.enrollButton:not(:disabled):hover {
+    background: #5e6000;
+}
+
+.enrollButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.enrollButton:focus-visible {
+    outline: 3px solid rgba(115, 115, 0, 0.35);
+    outline-offset: 3px;
+}
+
+.note {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: #68707b;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.error,
+.closed,
+.success {
+    margin: 0 0 0.6rem;
+    font-size: 0.88rem;
+}
+
+.error,
+.closed {
+    color: #a14235;
+}
+
+.success {
+    color: #3b6b3c;
+}
+
+.moreInfo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.3rem 3.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e6e9df;
+}
+
+.moreInfo h2 {
+    margin: 0 0 0.85rem;
+    color: #202a32;
+    font-size: 1.4rem;
+    line-height: 1.35;
+}
+
+.detailsSection p {
+    max-width: 70ch;
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.85;
+    white-space: pre-wrap;
+}
+
+.outcomesSection ul,
+.curriculumSection ol {
+    display: grid;
+    gap: 0.8rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.outcomesSection li,
+.curriculumSection li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: #4b5563;
+    line-height: 1.65;
+}
+
+.outcomesSection li svg {
+    flex: none;
+    margin-top: 0.2rem;
+    color: var(--primary-olive);
+}
+
+.curriculumSection li {
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid #e6e9df;
+}
+
+.curriculumSection li span {
+    flex: none;
+    color: var(--primary-olive);
+    font-weight: 750;
+}
+
+.instructorSection p {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+    color: #4b5563;
+}
+
+.instructorSection svg {
+    color: var(--primary-olive);
+}
+
+@media (max-width: 1050px) {
+    .hero {
+        grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+        gap: 2rem;
+    }
+
+    .enrollPanel {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 780px) {
+    .hero {
+        grid-template-columns: 1fr;
+        gap: 1.6rem;
+    }
+
+    .cover {
+        aspect-ratio: 2 / 1;
+    }
+
+    .enrollPanel {
+        grid-template-columns: minmax(0, 1fr) minmax(235px, 1.1fr);
+    }
+
+    .moreInfo {
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 560px) {
+    .page {
+        padding-bottom: 5.5rem;
+    }
+
+    .container {
+        width: 100%;
+        padding: 0 1.25rem 3rem;
+    }
+
+    .backRow {
+        padding: 0.85rem 0 1rem;
+    }
+
+    .hero {
+        gap: 1.3rem;
+    }
+
+    .cover {
+        aspect-ratio: 2.1 / 1;
+        border-radius: 0.9rem;
+    }
+
+    .content h1 {
+        font-size: 1.8rem;
+    }
+
+    .enrollPanel {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 20;
+        grid-template-columns: minmax(100px, 0.7fr) minmax(0, 1.3fr);
+        gap: 0.75rem;
+        margin: 0;
+        padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+        border-right: 0;
+        border-bottom: 0;
+        border-left: 0;
+        border-radius: 0;
+        background: #fdfdfa;
+        box-shadow: 0 -8px 24px rgba(31, 41, 55, 0.08);
+    }
+
+    .price {
+        font-size: 1.15rem;
+    }
+
+    .note {
+        display: none;
+    }
+
+    .moreInfo {
+        grid-template-columns: 1fr;
+        margin-top: 2rem;
+        padding-top: 1.6rem;
+    }
+}

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, Suspense } from "react";
 import Link from "next/link";
+import BackLink from "@/components/ui/BackLink";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Search,
@@ -158,10 +159,10 @@ function LicenseSearchResultsInner() {
 
   return (
     <div className={pageStyles.pageInner}>
-      <Link href="/" className={pageStyles.backBtn}>
+      <BackLink href="/" className={pageStyles.backBtn}>
         <ChevronLeft size={18} />
-        <span>ย้อนกลับหน้าแรก</span>
-      </Link>
+        <span>ย้อนกลับ</span>
+      </BackLink>
 
       <div className={`${styles.searchBoxCard} ${pageStyles.searchCard}`}>
         <div className={styles.header}>

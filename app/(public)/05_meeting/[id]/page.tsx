@@ -10,6 +10,7 @@ import { conferenceAssetUrl, getEventDetail, getPersonalizedOfferings } from "@/
 import { resolveMeetingRegistrationAction } from "@/lib/conference/checkout";
 import { ensureConferenceSession } from "@/lib/conference/session";
 import type { EventDetail, PersonalizedOffering } from "@/lib/conference/types";
+import { useBackNavigation } from "@/components/ui/useBackNavigation";
 import styles from "./meetingDetail.module.css";
 
 const dateText = (value: string) => new Date(value).toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric" });
@@ -23,6 +24,7 @@ export default function MeetingDetailPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const { isLoggedIn } = useAuth();
+  const goBack = useBackNavigation(isLoggedIn ? "/member-meeting" : "/meeting");
   const [event, setEvent] = useState<EventDetail | null>(null);
   const [offerings, setOfferings] = useState<PersonalizedOffering[]>([]);
   const [memberError, setMemberError] = useState("");
@@ -78,7 +80,7 @@ export default function MeetingDetailPage() {
 
   return <div className={styles.pageWrapper}>
     <div className={styles.banner} style={{ backgroundImage: `url("${hero}")` }}><div className={styles.bannerOverlay}>
-      <button type="button" onClick={() => router.push(isLoggedIn ? "/member-meeting" : "/meeting")} className={styles.backBtn}><ChevronLeft size={20} /><span>กลับสู่หน้ารวม</span></button>
+      <button type="button" onClick={goBack} className={styles.backBtn}><ChevronLeft size={20} /><span>ย้อนกลับ</span></button>
       <div className={styles.bannerContent}><h1 className={`${styles.bannerTitle} ThaiFont`}>{event.nameTh}</h1><div className={styles.bannerMeta}>
         <div className={styles.metaItem}><Calendar size={18} /><span>{dateText(event.startAt)} - {dateText(event.endAt)}</span></div>
         <div className={styles.metaItem}><MapPin size={18} /><span>{event.locationName || "จะแจ้งให้ทราบภายหลัง"}</span></div>

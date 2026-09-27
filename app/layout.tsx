@@ -4,6 +4,7 @@ import "./globals.css";
 import AppHeader from "@/components/ui/AppHeader";
 import Footer from "@/components/ui/Footer";
 import Providers from "@/components/ui/Providers";
+import BackNavigationTracker from "@/components/ui/BackNavigationTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
     <html lang="th">
       <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} ${kanit.variable} antialiased bg-gray-50 text-gray-900 flex flex-col min-h-screen`}>
         <Providers>
+          <BackNavigationTracker />
           <AppHeader />
           <main className="flex-grow flex flex-col bg-white pb-[var(--page-bottom-space)]">{children}</main>
           <Footer />

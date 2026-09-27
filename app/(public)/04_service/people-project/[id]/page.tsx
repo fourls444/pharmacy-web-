@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
+import BackLink from '@/components/ui/BackLink';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Calendar } from 'lucide-react';
 import { getPublicProjectById } from '@/lib/api';
@@ -37,10 +37,10 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
     return (
         <article className={styles.container}>
-            <Link href="/service/people-project" className={styles.backBtn}>
+            <BackLink href="/service/people-project" className={styles.backBtn}>
                 <ArrowLeft size={20} />
-                <span>กลับไปหน้าโครงการประชาชน</span>
-            </Link>
+                <span>ย้อนกลับ</span>
+            </BackLink>
 
             <header className={styles.header}>
                 <div className={styles.category}>

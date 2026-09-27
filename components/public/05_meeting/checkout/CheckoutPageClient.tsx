@@ -7,6 +7,7 @@ import { ConferenceApiError, createOrder, getConferenceProfile, getEventDetail, 
 import { emptyTaxInvoice, formatMoney, minorUnitsText, offeringReason, selectedOfferings, selectionTotal, validateTaxInvoice } from "@/lib/conference/checkout";
 import { ensureConferenceSession } from "@/lib/conference/session";
 import type { ConferenceAttendeeProfile, EventDetail, PersonalizedOffering, TaxInvoiceInput } from "@/lib/conference/types";
+import { useBackNavigation } from "@/components/ui/useBackNavigation";
 import { CheckoutProgress } from "./CheckoutProgress";
 import styles from "./checkout-flow.module.css";
 
@@ -63,6 +64,7 @@ function TaxInvoiceFields({ value, errors, onChange }: { value: TaxInvoiceInput;
 
 export function CheckoutPageClient({ eventId }: { eventId: string }) {
   const router = useRouter();
+  const goBack = useBackNavigation(`/meeting/${eventId}`);
   const [event, setEvent] = useState<EventDetail | null>(null);
   const [profile, setProfile] = useState<ConferenceAttendeeProfile | null>(null);
   const [offerings, setOfferings] = useState<PersonalizedOffering[]>([]);
@@ -193,7 +195,7 @@ export function CheckoutPageClient({ eventId }: { eventId: string }) {
   return <main className={`${styles.page} ThaiFont`}>
     <div className={styles.shell}>
       <header className={styles.flowHeader}>
-        <button type="button" className={styles.backLink} onClick={() => router.push(`/meeting/${eventId}`)}><ChevronLeft size={19} />กลับไปดูรายละเอียดงาน</button>
+        <button type="button" className={styles.backLink} onClick={goBack}><ChevronLeft size={19} />ย้อนกลับ</button>
         <CheckoutProgress current="checkout" />
       </header>
 

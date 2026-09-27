@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, ArrowRight } from 'lucide-react';
+import { Calendar } from 'lucide-react';
+import ViewAllLink from '@/components/ui/ViewAllLink';
 import { News } from '@/lib/api';
 import styles from './FeaturedNews.module.css';
 
@@ -70,10 +71,7 @@ export default function FeaturedNews({ news, showViewAll = false }: FeaturedNews
             <div className={styles.header}>
                 <h2 className={styles.sectionTitle}>เรื่องเด่น</h2>
                 {showViewAll && (
-                    <Link href="/news" className={styles.viewAll}>
-                        ดูทั้งหมด
-                        <ArrowRight size={18} strokeWidth={2} />
-                    </Link>
+                    <ViewAllLink href="/news" />
                 )}
             </div>
 

@@ -10,6 +10,7 @@ interface CourseFiltersProps {
     searchTerm: string;
     onCategoryChange: (category: string) => void;
     onSearchChange: (term: string) => void;
+    onSearch?: () => void;
 }
 
 export default function CourseFilters({
@@ -17,7 +18,8 @@ export default function CourseFilters({
     selectedCategory,
     searchTerm,
     onCategoryChange,
-    onSearchChange
+    onSearchChange,
+    onSearch,
 }: CourseFiltersProps) {
     const [catDropdownOpen, setCatDropdownOpen] = useState(false);
 
@@ -34,6 +36,8 @@ export default function CourseFilters({
                     <button
                         type="button"
                         className={styles.dropdownButton}
+                        aria-expanded={catDropdownOpen}
+                        aria-haspopup="listbox"
                         onClick={() => {
                             setCatDropdownOpen(!catDropdownOpen);
                         }}
@@ -43,11 +47,13 @@ export default function CourseFilters({
                         <ChevronDown size={16} className={`${styles.chevron} ${catDropdownOpen ? styles.chevronRotate : ''}`} />
                     </button>
                     {catDropdownOpen && (
-                        <ul className={styles.dropdownMenu}>
+                        <ul className={styles.dropdownMenu} role="listbox" aria-label="เลือกหมวดหมู่คอร์ส">
                             {categories.map(cat => (
                                 <li key={cat}>
                                     <button
                                         type="button"
+                                        role="option"
+                                        aria-selected={cat === selectedCategory}
                                         className={`${styles.dropdownItem} ${cat === selectedCategory ? styles.dropdownItemActive : ''}`}
                                         onClick={() => {
                                             onCategoryChange(cat);
@@ -68,9 +74,11 @@ export default function CourseFilters({
                     <input
                         type="text"
                         className={styles.input}
+                        aria-label="ค้นหาคอร์ส"
                         placeholder="ชื่อคอร์ส, วิทยากร หรือเนื้อหา..."
                         value={searchTerm}
                         onChange={e => onSearchChange(e.target.value)}
+                        onKeyDown={(event) => { if (event.key === 'Enter') onSearch?.(); }}
                     />
                 </div>
 
@@ -78,6 +86,7 @@ export default function CourseFilters({
                 <button
                     type="button"
                     className={styles.searchButton}
+                    onClick={onSearch}
                 >
                     ค้นหา
                 </button>

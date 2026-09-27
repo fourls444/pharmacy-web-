@@ -6,23 +6,16 @@ import Image from 'next/image';
 import { ArrowRight, Clock, Award } from 'lucide-react';
 import styles from './PopularCourses.module.css';
 import SectionHeader from '@/components/ui/SectionHeader';
-
-const MOCK_COURSES = [
-    { id: 1, title: "การจัดการความดันโลหิตสูงในผู้ป่วยสูงอายุ", category: "เภสัชกรรมโรงพยาบาล", duration: "2.5 ชม.", cpe: "2.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=600&auto=format&fit=crop" },
-    { id: 2, title: "ทักษะการสื่อสารเพื่อการดูแลผู้ป่วยเบาหวาน", category: "เภสัชกรรมชุมชน", duration: "1.5 ชม.", cpe: "1.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?q=80&w=600&auto=format&fit=crop" },
-    { id: 3, title: "เภสัชกรรมคลินิกในโรคไตเรื้อรัง", category: "เภสัชกรรมชุมชน", duration: "3 ชม.", cpe: "3.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=600&auto=format&fit=crop" },
-    { id: 4, title: "การบริบาลทางเภสัชกรรมในผู้ป่วยมะเร็ง", category: "เภสัชกรรมโรงพยาบาล", duration: "2 ชม.", cpe: "2.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1530026405186-ed1f139313f8?q=80&w=600&auto=format&fit=crop" },
-    { id: 5, title: "การประเมินความปลอดภัยของผลิตภัณฑ์สมุนไพร", category: "การผลิตและควบคุม", duration: "4 ชม.", cpe: "4.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=600&auto=format&fit=crop" },
-    { id: 6, title: "กฎหมายและจรรยาบรรณวิชาชีพเภสัชกรรม 2024", category: "กฎหมายและจริยธรรม", duration: "1.5 ชม.", cpe: "1.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=600&auto=format&fit=crop" },
-    { id: 7, title: "เทคโนโลยี AI ในงานเภสัชกรรมสมัยใหม่", category: "เภสัชศาสตร์นวัตกรรม", duration: "2.5 ชม.", cpe: "2.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&auto=format&fit=crop" },
-    { id: 8, title: "การจัดการคลังยาและโลจิสติกส์การแพทย์", category: "การบริหารงานคลัง", duration: "3 ชม.", cpe: "3.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=600&auto=format&fit=crop" },
-    { id: 9, title: "จิตวิทยาการบริการสำหรับเภสัชกรชุมชน", category: "เภสัชกรรมชุมชน", duration: "2 ชม.", cpe: "2.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=600&auto=format&fit=crop" }
-];
+import { academyCourseHref } from '@/lib/academy/navigation';
+import type { AcademyCourse } from '@/lib/academy/client';
 
 const getCategoryColor = (category: string) => {
     switch (category) {
         case 'เภสัชกรรมชุมชน': return '#4e73df';
         case 'เภสัชกรรมโรงพยาบาล': return '#1cc88a';
+        case 'เภสัชบำบัด': return '#1b7f91';
+        case 'เภสัชกรรมสมุนไพร': return '#5b8c40';
+        case 'การบริหารเภสัชกิจ': return '#6b63b5';
         case 'การผลิตและควบคุม': return '#f6c23e';
         case 'กฎหมายและจริยธรรม': return '#e74a3b';
         case 'เภสัชวิเคราะห์': return '#36b9cc';
@@ -33,7 +26,8 @@ const getCategoryColor = (category: string) => {
     }
 };
 
-export default function PopularCourses() {
+export default function PopularCourses({ courses }: { courses: AcademyCourse[] }) {
+    if (courses.length === 0) return null;
     return (
         <section className={styles.section}>
             <div className={styles.container}>
@@ -44,20 +38,20 @@ export default function PopularCourses() {
                 />
 
                 <div className={styles.grid}>
-                    {MOCK_COURSES.map((course) => (
-                        <Link href={`/learning/${course.id}`} key={course.id} className={styles.card}>
+                    {courses.slice(0, 9).map((course) => (
+                        <Link href={academyCourseHref(course.id, '/learning')} key={course.id} className={styles.card}>
                             <div className={styles.imageWrapper}>
                                 <Image
-                                    src={course.image}
+                                    src={course.thumbnailUrl || '/images/public/learning/categories/cat1.png'}
                                     alt={course.title}
                                     fill
                                     className={styles.image}
                                 />
                                 <div
                                     className={styles.badge}
-                                    style={{ backgroundColor: getCategoryColor(course.category) }}
+                                    style={{ backgroundColor: getCategoryColor(course.categoryName || '') }}
                                 >
-                                    {course.category}
+                                    {course.categoryName || 'Pharmacy Academy'}
                                 </div>
                             </div>
                             <div className={styles.content}>
@@ -65,11 +59,11 @@ export default function PopularCourses() {
                                 <div className={styles.meta}>
                                     <div className={styles.metaItem}>
                                         <Clock size={16} />
-                                        <span>{course.duration}</span>
+                                        <span>{Number((course.durationMinutes / 60).toFixed(1))} ชม.</span>
                                     </div>
                                     <div className={styles.metaItem}>
                                         <Award size={16} />
-                                        <span>{course.cpe}</span>
+                                        <span>{Number(course.cpeCredits).toLocaleString('th-TH')} หน่วยกิต</span>
                                     </div>
                                 </div>
                                 <div className={styles.footer}>

@@ -113,6 +113,8 @@ Base URL:
 process.env.NEXT_PUBLIC_API_URL
 ```
 
+Pharmacy Academy ใช้ server route `/api/academy/*` เป็น proxy เพื่อผูก session สมาชิกกับ assertion ที่ลงนามก่อนส่งคำขอที่ต้องยืนยันตัวตนไปยัง API; ตั้ง `PHARMACY_ASSERTION_PRIVATE_JWK` ใน production และตั้ง public key คู่กันใน `03_backend-api` ผ่าน `PHARMACY_ASSERTION_PUBLIC_JWK` โดยให้ key id ตรงกัน
+
 ถ้าไม่มี env:
 
 - server side fallback ไป `https://pharmacy-api-6w5d.onrender.com`

@@ -8,6 +8,7 @@ import { ConferenceApiError, getOrder } from "@/lib/conference/api";
 import { formatMoney } from "@/lib/conference/checkout";
 import { ensureConferenceSession } from "@/lib/conference/session";
 import type { CheckoutOrder } from "@/lib/conference/types";
+import { useBackNavigation } from "@/components/ui/useBackNavigation";
 import { CheckoutProgress } from "./CheckoutProgress";
 import { FlowError, FlowLoading } from "./CheckoutPageClient";
 import styles from "./checkout-flow.module.css";
@@ -16,6 +17,7 @@ const dateText = (value: string) => new Date(value).toLocaleDateString("th-TH", 
 
 export function SuccessPageClient({ eventId, orderId }: { eventId: string; orderId: string }) {
   const router = useRouter();
+  const goBack = useBackNavigation(`/meeting/${eventId}`);
   const [order, setOrder] = useState<CheckoutOrder | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -47,7 +49,7 @@ export function SuccessPageClient({ eventId, orderId }: { eventId: string; order
   return <main className={`${styles.page} ThaiFont`}>
     <div className={`${styles.shell} ${styles.successShell}`}>
       <header className={styles.flowHeader}>
-        <button type="button" className={styles.backLink} onClick={() => router.push(`/meeting/${eventId}`)}><ChevronLeft size={19} />กลับไปดูรายละเอียดงาน</button>
+        <button type="button" className={styles.backLink} onClick={goBack}><ChevronLeft size={19} />ย้อนกลับ</button>
         <CheckoutProgress current="success" free={free} />
       </header>
       <section className={styles.successHero}><span className={styles.successSeal}><Check size={36} /></span><p className={styles.eyebrow}>Registration complete</p><h1>ลงทะเบียนสำเร็จ</h1><p>เก็บ QR ด้านล่างไว้สำหรับแสดงสิทธิ์และเช็กอินในวันงาน</p><div className={styles.orderCode}>ORDER · {order.number}</div></section>

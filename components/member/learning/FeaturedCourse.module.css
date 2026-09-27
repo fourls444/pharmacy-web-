@@ -135,10 +135,12 @@
 }
 
 .enrollBtn {
+    display: inline-block;
     width: fit-content;
     padding: 1rem 2.5rem;
     background: linear-gradient(90deg, #c5c178 0%, #737300 100%);
     color: white;
+    text-decoration: none;
     border: none;
     border-radius: 1rem;
     font-weight: 700;

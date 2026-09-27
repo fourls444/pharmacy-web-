@@ -88,7 +88,8 @@ export default function DetailPage({
         footerMeta={{ title: module.title }}
         footerActions={[
           {
-            label: "กลับไปหน้าประวัติ",
+            label: "ย้อนกลับ",
+            back: true,
             href: `/service/e-service/${module.slug}/history`,
             variant: "ghost",
           },

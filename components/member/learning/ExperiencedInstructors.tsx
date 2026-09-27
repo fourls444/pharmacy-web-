@@ -42,8 +42,6 @@ export default function ExperiencedInstructors() {
             <div className={styles.container}>
                 <SectionHeader 
                     title="วิทยากรผู้เชี่ยวชาญ" 
-                    viewAllHref="/learning/instructors" 
-                    viewAllText="ดูทั้งหมด"
                 />
                 
                 <p className={styles.subtitle}>เรียนรู้จากประสบการณ์จริงของเภสัชกรและคณาจารย์ผู้ทรงคุณวุฒิในสายวิชาชีพ</p>

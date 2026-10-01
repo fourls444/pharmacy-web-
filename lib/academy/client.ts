@@ -1,6 +1,8 @@
 import { mockAcademy, runMock } from './mock';
 
-const USE_MOCK_ACADEMY = process.env.NEXT_PUBLIC_ACADEMY_DATA_SOURCE !== 'api';
+// Keep the public Academy on sample data until its API is ready.
+// Set this to false when switching to the shared NEXT_PUBLIC_API_URL backend.
+const USE_MOCK_ACADEMY = true;
 
 export interface AcademyCategory {
   id: number;

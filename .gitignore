@@ -43,6 +43,10 @@ next-env.d.ts
 # agents
 .agents
 /skills-lock.json
+
+# local work updates
+/docs/updates/
+
 # Local Figma pull artifacts
 .figma-pull/
 .figma-*.png

@@ -3,38 +3,43 @@
     background: #ffffff;
 }
 
+.empty {
+    margin: 1.5rem 0;
+    color: #475569;
+}
+
 .container {
-    max-width: var(--max-width-xl);
-    width: 90%;
+    box-sizing: border-box;
+    max-width: 1280px;
+    width: 100%;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 24px;
 }
 
 .subtitle {
     font-size: 1.1rem;
-    color: #6b7280;
-    margin: -0.5rem 0 3rem 0;
+    color: #475569;
+    margin: 0 0 24px;
 }
 
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 2.5rem;
+    gap: 24px;
 }
 
 .card {
     text-align: center;
     background: white;
     padding: 2rem;
-    border-radius: 1.5rem;
-    transition: all 0.3s ease;
+    border-radius: 12px;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
     border: 1px solid #f3f4f6;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
 }
 
 .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 20px rgba(30, 41, 59, 0.06);
     border-color: var(--primary-olive);
 }
 
@@ -47,6 +52,13 @@
     overflow: hidden;
     border: 4px solid #f8f9fa;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef2e5;
+    color: var(--primary-olive);
+    font-size: 3rem;
+    font-weight: 600;
 }
 
 .image {
@@ -61,8 +73,8 @@
 
 .name {
     font-size: 1.25rem;
-    font-weight: 700;
-    color: #1f2937;
+    font-weight: 600;
+    color: #1e293b;
     margin: 0;
 }
 
@@ -75,7 +87,7 @@
 
 .expertise {
     font-size: 0.8rem;
-    color: #9ca3af;
+    color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 0.5rem;
@@ -92,8 +104,27 @@
     .grid {
         grid-template-columns: 1fr;
     }
-    
     .subtitle {
         font-size: 1rem;
+    }
+}
+
+.container a:focus-visible {
+    outline: 3px solid #a6a66c;
+    outline-offset: 3px;
+}
+
+.container h2 {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.container a {
+    font-weight: 500;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 0 20px;
     }
 }

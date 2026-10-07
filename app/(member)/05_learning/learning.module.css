@@ -1,30 +1,56 @@
 .page {
     width: 100%;
-
-    background-color: #fff;
+    background: #fff;
+    color: #1e293b;
+    font-weight: 400;
 }
 
 .container {
-    max-width: var(--max-width-xl);
-    width: 90%;
+    box-sizing: border-box;
+    max-width: 1280px;
+    width: 100%;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 24px;
 }
 
-.comingSoon {
-    padding: 6rem 0;
-    background: #f8f9fa;
-    text-align: center;
+.search {
+    padding-top: 48px;
+    padding-bottom: 16px;
 }
 
-.inner h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2d3436;
-    margin-bottom: 1rem;
+.page h1, .page h2, .page h3, .page h4 {
+    font-weight: 600;
 }
 
-.inner p {
-    font-size: 1.1rem;
-    color: #636e72;
+@media (max-width: 640px) {
+    .container {
+        padding: 0 20px;
+    }
+    .search {
+        padding-top: 48px;
+    }
 }
+
+.sectionState {
+    padding: 48px 0;
+    background: #fff;
+}
+.sectionMessage {
+    color: #475569;
+    line-height: 1.7;
+}
+.sectionMessage p { margin: 0; }
+.retryButton {
+    margin-top: 16px;
+    min-height: 44px;
+    padding: 10px 20px;
+    border: 1px solid #737300;
+    border-radius: 8px;
+    background: #737300;
+    color: #fff;
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+}
+.retryButton:hover { background: #606000; }
+.retryButton:focus-visible { outline: 3px solid #a6a66c; outline-offset: 3px; }

@@ -1,18 +1,17 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { signPharmacyAssertion } from '@/lib/server/conference-assertion';
 import { PHARMACY_SESSION_COOKIE, readPharmacySession } from '@/lib/server/pharmacy-auth/session';
+import { API_BASE_URL } from '@/lib/api';
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? '').replace(/\/$/, '');
+const API_URL = API_BASE_URL;
 const ACADEMY_AUDIENCE = 'pharmacy-academy-api';
 
 function isAllowed(method: string, path: string[]) {
   const joined = path.join('/');
-  if (method === 'GET' && ['categories', 'courses'].includes(joined)) return { authenticated: false };
+  if (method === 'GET' && ['categories', 'courses', 'instructors', 'reviews', 'stats'].includes(joined)) return { authenticated: false };
   if (method === 'GET' && /^courses\/\d+$/.test(joined)) return { authenticated: false };
-  if (method === 'GET' && joined === 'me/enrollments') return { authenticated: true };
-  if (method === 'GET' && /^orders\/\d+$/.test(joined)) return { authenticated: true };
-  if (method === 'POST' && /^courses\/\d+\/orders$/.test(joined)) return { authenticated: true };
-  if (method === 'POST' && /^orders\/\d+\/mock-complete$/.test(joined)) return { authenticated: true };
+  if (method === 'GET' && joined === 'member/enrollments') return { authenticated: true };
+  if (method === 'POST' && ['member/enroll', 'member/orders'].includes(joined)) return { authenticated: true };
   return null;
 }
 
@@ -22,7 +21,6 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
   if (!rule || path.some((part) => part === '..' || part.includes('\\'))) {
     return Response.json({ message: 'ไม่พบข้อมูลที่ต้องการ' }, { status: 404 });
   }
-  if (!API_URL) return Response.json({ message: 'ยังไม่ได้ตั้งค่า Academy API' }, { status: 503 });
 
   const headers = new Headers({ accept: 'application/json' });
   const contentType = request.headers.get('content-type');

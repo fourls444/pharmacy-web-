@@ -1,6 +1,8 @@
 "use client";
 
-import { Suspense, useEffect, useState } from 'react';
+import AcademySkeleton from '@/components/member/learning/AcademySkeleton';
+
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Search } from 'lucide-react';
 import styles from './courses.module.css';
@@ -13,23 +15,6 @@ import CourseFilters from '@/components/member/learning/courses/CourseFilters';
 
 const ALL = 'ทั้งหมด';
 
-const getCategoryColor = (category: string) => {
-    switch (category) {
-        case 'เภสัชกรรมชุมชน': return '#4e73df';
-        case 'เภสัชกรรมโรงพยาบาล': return '#1cc88a';
-        case 'เภสัชบำบัด': return '#1b7f91';
-        case 'เภสัชกรรมสมุนไพร': return '#5b8c40';
-        case 'การบริหารเภสัชกิจ': return '#6b63b5';
-        case 'การผลิตและควบคุม': return '#f6c23e';
-        case 'กฎหมายและจริยธรรม': return '#e74a3b';
-        case 'เภสัชวิเคราะห์': return '#36b9cc';
-        case 'การคุ้มครองผู้บริโภค': return '#f6c23e';
-        case 'เภสัชศาสตร์นวัตกรรม': return '#4e73df';
-        case 'การบริหารงานคลัง': return '#1cc88a';
-        default: return '#737300';
-    }
-};
-
 function durationLabel(minutes: number) {
     if (!minutes) return 'เรียนตามเวลาของคุณ';
     return `${Number((minutes / 60).toFixed(1))} ชม.`;
@@ -38,28 +23,56 @@ function durationLabel(minutes: number) {
 function CoursesContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const searchQuery = searchParams.get('search') ?? '';
+    const categoryQuery = searchParams.get('category') ?? ALL;
     const [searchTerm, setSearchTerm] = useState(() => searchParams.get('search') ?? '');
+    const [searchDraft, setSearchDraft] = useState(() => searchParams.get('search') ?? '');
+    const [requestVersion, setRequestVersion] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState(() => searchParams.get('category') ?? ALL);
     const [categories, setCategories] = useState<AcademyCategory[]>([]);
     const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+    const [categoryError, setCategoryError] = useState('');
+    const [categoryRequest, setCategoryRequest] = useState(0);
     const [courses, setCourses] = useState<AcademyCourse[]>([]);
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
+    const [moreError, setMoreError] = useState('');
     const [error, setError] = useState('');
+    const generation = useRef(0);
+    const pendingReload = useRef(true);
+    const pendingMore = useRef(false);
+    const activeFilters = useRef({ search: searchQuery, category: categoryQuery });
+
+    useEffect(() => {
+        if (activeFilters.current.search === searchQuery && activeFilters.current.category === categoryQuery) return;
+        activeFilters.current = { search: searchQuery, category: categoryQuery };
+        generation.current += 1;
+        pendingReload.current = true;
+        pendingMore.current = false;
+        setLoadingMore(false);
+        setLoading(true);
+        setError('');
+        setMoreError('');
+        setSearchTerm(searchQuery);
+        setSearchDraft(searchQuery);
+        setSelectedCategory(categoryQuery);
+    }, [searchQuery, categoryQuery]);
 
     useEffect(() => {
         let cancelled = false;
         listAcademyCategories().then((items) => {
             if (!cancelled) { setCategories(items); setCategoriesLoaded(true); }
         }).catch((reason: unknown) => {
-            if (!cancelled) { setError(reason instanceof AcademyError ? reason.message : 'โหลดหมวดหมู่ไม่สำเร็จ'); setCategoriesLoaded(true); }
+            if (!cancelled) { setCategoryError(reason instanceof AcademyError ? reason.message : 'โหลดหมวดหมู่ไม่สำเร็จ'); setCategoriesLoaded(true); }
         });
         return () => { cancelled = true; };
-    }, []);
+    }, [categoryRequest]);
 
     useEffect(() => {
         if (!categoriesLoaded) return;
+        const requestGeneration = ++generation.current;
+        pendingReload.current = true;
         let cancelled = false;
         const timer = setTimeout(() => {
             setLoading(true);
@@ -68,31 +81,48 @@ function CoursesContent() {
                 setCourses([]);
                 setTotal(0);
                 setLoading(false);
+                pendingReload.current = false;
                 return;
             }
             listAcademyCourses({ search: searchTerm, categoryId, limit: 100 })
                 .then((page) => {
-                    if (cancelled) return;
+                    if (cancelled || generation.current !== requestGeneration) return;
                     setCourses(page.items);
                     setTotal(page.total);
                     setError('');
+        setMoreError('');
                 })
                 .catch((reason: unknown) => {
-                    if (!cancelled) setError(reason instanceof AcademyError ? reason.message : 'โหลดคอร์สไม่สำเร็จ');
+                    if (!cancelled && generation.current === requestGeneration) setError(reason instanceof AcademyError ? reason.message : 'โหลดคอร์สไม่สำเร็จ');
                 })
-                .finally(() => { if (!cancelled) setLoading(false); });
+                .finally(() => { if (!cancelled && generation.current === requestGeneration) { setLoading(false); pendingReload.current = false; } });
         }, 200);
         return () => { cancelled = true; clearTimeout(timer); };
-    }, [searchTerm, selectedCategory, categories, categoriesLoaded]);
+    }, [searchTerm, selectedCategory, categories, categoriesLoaded, requestVersion]);
 
     const returnTo = academyCoursesHref(searchTerm, selectedCategory);
     const updateFilters = (search: string, category: string) => {
-        setSearchTerm(search);
+        generation.current += 1;
+        pendingReload.current = true;
+        pendingMore.current = false;
+        setLoadingMore(false);
+        const query = search.trim();
+        activeFilters.current = { search: query, category };
+        setSearchDraft(query);
+        setSearchTerm(query);
         setSelectedCategory(category);
-        router.replace(academyCoursesHref(search, category), { scroll: false });
+        setLoading(true);
+        setError('');
+        setMoreError('');
+        setRequestVersion((current) => current + 1);
+        router.replace(academyCoursesHref(query, category), { scroll: false });
     };
     const loadMore = async () => {
+        if (pendingReload.current || pendingMore.current) return;
+        pendingMore.current = true;
+        const requestGeneration = generation.current;
         setLoadingMore(true);
+        setMoreError('');
         try {
             const categoryId = categories.find((item) => item.name === selectedCategory)?.id;
             const next = await listAcademyCourses({
@@ -101,37 +131,50 @@ function CoursesContent() {
                 page: Math.floor(courses.length / 100) + 1,
                 limit: 100,
             });
+            if (generation.current !== requestGeneration) return;
             setCourses((current) => [...current, ...next.items]);
             setTotal(next.total);
         } catch (reason) {
-            setError(reason instanceof AcademyError ? reason.message : 'โหลดคอร์สเพิ่มเติมไม่สำเร็จ');
+            if (generation.current === requestGeneration) setMoreError(reason instanceof AcademyError ? reason.message : 'โหลดคอร์สเพิ่มเติมไม่สำเร็จ');
         } finally {
-            setLoadingMore(false);
+            if (generation.current === requestGeneration) { setLoadingMore(false); pendingMore.current = false; }
         }
     };
 
     return (
         <div className={styles.page}>
-            <LearningBanner />
+            <LearningBanner title="คอร์สทั้งหมด" />
             <div className={`${styles.container} ${styles.backRow}`}><AcademyBackLink href="/learning" destination="Pharmacy Academy" /></div>
             <section className={styles.searchSection}>
                 <div className={styles.container}>
                     <CourseFilters
                         categories={[ALL, ...categories.map((item) => item.name)]}
                         selectedCategory={selectedCategory}
-                        searchTerm={searchTerm}
-                        onCategoryChange={(category) => updateFilters(searchTerm, category)}
-                        onSearchChange={(search) => updateFilters(search, selectedCategory)}
+                        searchTerm={searchDraft}
+                        onCategoryChange={(category) => updateFilters(searchDraft, category)}
+                        onSearchChange={setSearchDraft}
+                        onSearch={() => updateFilters(searchDraft, selectedCategory)}
                     />
+                    {categoryError && <div className={styles.categoryError} role="alert">
+                        <p>{categoryError}</p>
+                        <button type="button" className={styles.resetButton} onClick={() => {
+                            setCategoriesLoaded(false);
+                            generation.current += 1;
+                            pendingReload.current = true;
+                            setLoading(true);
+                            setCategoryError('');
+                            setCategoryRequest((current) => current + 1);
+                        }}>โหลดหมวดหมู่อีกครั้ง</button>
+                    </div>}
                 </div>
             </section>
             <section className={styles.coursesSection}>
                 <div className={styles.container}>
                     <div className={styles.resultsBar}>
-                        <div className={styles.resultsCount}>พบทั้งหมด <span>{total}</span> รายการ</div>
+                        <div className={styles.resultsCount} aria-live="polite">{loading ? 'กำลังค้นหาคอร์ส...' : <>พบทั้งหมด <span>{total}</span> รายการ</>}</div>
                     </div>
-                    {error ? <div className={styles.emptyState} role="alert">{error}</div> : loading ? (
-                        <div className={styles.emptyState}>กำลังโหลดคอร์ส...</div>
+                    {error ? <div className={styles.emptyState} role="alert"><p>{error}</p><button type="button" className={styles.resetButton} onClick={() => updateFilters(searchTerm, selectedCategory)}>ลองอีกครั้ง</button></div> : loading ? (
+                        <AcademySkeleton label="กำลังโหลดคอร์ส..." count={6} />
                     ) : courses.length > 0 ? (
                         <div className={styles.grid}>
                             {courses.map((course) => (
@@ -139,12 +182,13 @@ function CoursesContent() {
                                     key={course.id}
                                     id={course.id}
                                     title={course.title}
-                                    category={course.categoryName || 'Pharmacy Academy'}
-                                    duration={durationLabel(course.durationMinutes)}
+                                    category={course.categoryName}
+                                    duration={course.durationLabel || durationLabel(course.durationMinutes)}
                                     cpe={`${Number(course.cpeCredits).toLocaleString('th-TH')} หน่วยกิต`}
-                                    image={course.thumbnailUrl || '/images/public/learning/categories/cat1.png'}
+                                    image={course.thumbnailUrl}
                                     returnTo={returnTo}
-                                    getCategoryColor={getCategoryColor}
+                                    instructor={course.instructorName}
+                                    price={course.price}
                                 />
                             ))}
                         </div>
@@ -161,9 +205,10 @@ function CoursesContent() {
                             <button type="button" className={styles.resetButton} onClick={() => updateFilters('', ALL)}>ล้างตัวกรอง</button>
                         </div>
                     )}
+                    {!loading && !error && moreError && <p className={styles.categoryError} role="alert">{moreError}</p>}
                     {!loading && !error && courses.length < total && (
                         <button type="button" className={styles.resetButton} onClick={loadMore} disabled={loadingMore}>
-                            {loadingMore ? 'กำลังโหลด...' : 'ดูคอร์สเพิ่มเติม'}
+                            {loadingMore ? 'กำลังโหลด...' : moreError ? 'ลองโหลดเพิ่มเติมอีกครั้ง' : 'ดูคอร์สเพิ่มเติม'}
                         </button>
                     )}
                 </div>

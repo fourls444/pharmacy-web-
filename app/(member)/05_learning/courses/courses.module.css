@@ -1,12 +1,15 @@
 .page {
-    background-color: #fcfcfc;
-
+    background-color: #fff;
+    color: #1e293b;
+    font-weight: 400;
 }
 
 .container {
-    max-width: 1300px;
+    box-sizing: border-box;
+    max-width: 1280px;
+    width: 100%;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 24px;
 }
 
 .backRow {
@@ -38,14 +41,14 @@
 }
 
 .resultsCount span {
-    font-weight: 800;
+    font-weight: 600;
     color: #1e293b;
 }
 
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    gap: 24px;
 }
 
 /* === Empty State === */
@@ -58,7 +61,7 @@
     margin: 0 auto 4rem;
     padding: 3.5rem 2rem;
     border: 1px solid #e5e8d8;
-    border-radius: 1.5rem;
+    border-radius: 12px;
     background: #fbfcf6;
 }
 
@@ -74,7 +77,7 @@
 
 .emptyTitle {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
     color: #1e293b;
     margin: 1.3rem 0 0;
 }
@@ -90,7 +93,7 @@
     min-height: 44px;
     padding: 0.55rem 1.5rem;
     border: 1px solid var(--primary-olive);
-    border-radius: 999px;
+    border-radius: 8px;
     background: var(--primary-olive);
     color: #fff;
     font: inherit;
@@ -109,17 +112,40 @@
 }
 
 /* === Responsive === */
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
     .grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
     .grid {
         grid-template-columns: 1fr;
     }
     .emptyState {
         padding: 2.5rem 1.25rem;
     }
+}
+
+.coursesSection {
+    padding-bottom: 64px;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 0 20px;
+    }
+}
+
+.categoryError {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 20px;
+    color: #a14235;
+}
+
+.categoryError p {
+    margin: 0;
 }

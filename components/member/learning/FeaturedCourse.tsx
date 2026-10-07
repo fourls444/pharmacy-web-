@@ -1,7 +1,9 @@
 "use client";
 
+import AcademyImagePlaceholder from '@/components/member/learning/AcademyImagePlaceholder';
+
 import React, { useState } from 'react';
-import Image from 'next/image';
+import AcademyImage from './AcademyImage';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import styles from './FeaturedCourse.module.css';
@@ -11,7 +13,7 @@ import type { AcademyCourse } from '@/lib/academy/client';
 
 export default function FeaturedCourse({ courses }: { courses: AcademyCourse[] }) {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const featured = courses.slice(0, 2);
+    const featured = courses.filter((course) => course.isFeatured).slice(0, 2);
 
     const handlePrev = () => {
         setCurrentIndex((prev) => (prev === 0 ? featured.length - 1 : prev - 1));
@@ -27,9 +29,9 @@ export default function FeaturedCourse({ courses }: { courses: AcademyCourse[] }
     return (
         <section className={styles.section}>
             <div className={styles.container}>
-                <SectionHeader 
-                    title="คอร์สเรียนแนะนำ" 
-                    viewAllHref="/learning/courses" 
+                <SectionHeader
+                    title="คอร์สเรียนแนะนำ"
+                    viewAllHref="/learning/courses"
                     viewAllText="ดูทั้งหมด"
                 />
 
@@ -43,15 +45,16 @@ export default function FeaturedCourse({ courses }: { courses: AcademyCourse[] }
                             <ChevronRight size={24} />
                         </button>}
                         <div className={styles.imageSide}>
-                            <Image 
-                                src={course.thumbnailUrl || '/images/public/learning/categories/cat1.png'}
-                                alt={course.title} 
-                                fill 
-                                className={styles.image} 
+                            {course.thumbnailUrl ? <AcademyImage
+                                src={course.thumbnailUrl}
+                                alt={course.title}
+                                fill
+                                sizes="(max-width: 1024px) calc(100vw - 40px), 500px"
+                                className={styles.image}
                                 priority
-                            />
+                            /> : <AcademyImagePlaceholder />}
                         </div>
-                        
+
                         <div className={styles.contentSide}>
                             <div className={styles.topInfo}>
                                 <h2 className={styles.title}>{course.title}</h2>
@@ -70,7 +73,7 @@ export default function FeaturedCourse({ courses }: { courses: AcademyCourse[] }
                                 </ul>
                             </div>}
 
-                            <Link href={academyCourseHref(course.id, '/learning')} className={styles.enrollBtn}>เข้าสู่บทเรียน</Link>
+                            <Link href={academyCourseHref(course.id, '/learning')} className={styles.enrollBtn}>ดูรายละเอียด</Link>
 
                             <div className={styles.footer}>
                                 <div className={styles.footerItem}>

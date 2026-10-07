@@ -3,11 +3,17 @@
     background: #ffffff;
 }
 
+.empty {
+    margin: 1.5rem 0;
+    color: #475569;
+}
+
 .container {
-    max-width: var(--max-width-xl);
-    width: 90%;
+    box-sizing: border-box;
+    max-width: 1280px;
+    width: 100%;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 24px;
 }
 
 /* Header styles removed, using SectionHeader component */
@@ -15,15 +21,15 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
+    gap: 24px;
 }
 
 .card {
     background: white;
     padding: 1.5rem 1rem;
-    border-radius: 1.25rem;
+    border-radius: 12px;
     text-align: center;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: border-color 180ms ease, box-shadow 180ms ease;
     cursor: pointer;
     border: 1px solid #f0f0f0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
@@ -33,16 +39,15 @@
 }
 
 .card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-    border-color: var(--hover-color);
+    box-shadow: 0 6px 20px rgba(30, 41, 59, 0.06);
+    border-color: #626200;
 }
 
 .imageWrapper {
     width: 60px;
     height: 60px;
     margin-bottom: 1rem;
-    transition: all 0.3s ease;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .imageInner {
@@ -51,24 +56,24 @@
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: #edf3f7;
-    color: var(--hover-color);
+    background: #f0f1df;
+    color: #626200;
 }
 
 .card:hover .imageWrapper {
-    transform: scale(1.1) rotate(5deg);
+    transform: none;
 }
 
 .catTitle {
     font-size: 1.1rem;
-    font-weight: 700;
-    color: #2d3436;
+    font-weight: 600;
+    color: #1e293b;
     margin: 0 0 0.25rem 0;
 }
 
 .catCount {
     font-size: 0.95rem;
-    color: #636e72;
+    color: #475569;
     margin: 0;
 }
 
@@ -89,5 +94,25 @@
     }
     .title {
         font-size: 1.75rem;
+    }
+}
+
+.container a:focus-visible {
+    outline: 3px solid #a6a66c;
+    outline-offset: 3px;
+}
+
+.container h2 {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.container a {
+    font-weight: 500;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 0 20px;
     }
 }

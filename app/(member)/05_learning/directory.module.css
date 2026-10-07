@@ -1,0 +1,58 @@
+.page {
+    min-height: 65vh;
+    padding: 24px 0 64px;
+    background: #fff;
+    color: #1e293b;
+    font-weight: 400;
+}
+
+.back, .heading, .message {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.heading {
+    margin: 32px auto 24px;
+}
+
+.heading h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.4;
+}
+
+.message {
+    padding-top: 48px;
+    padding-bottom: 48px;
+    color: #475569;
+}
+
+.message p {
+    margin: 0;
+}
+
+.page section {
+    padding-top: 0;
+}
+
+.page h2, .page h3, .page h4 {
+    font-weight: 600;
+}
+
+@media (max-width: 640px) {
+    .back, .heading, .message {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .heading h1 {
+        font-size: 1.75rem;
+    }
+}
+
+.retryButton { min-height:44px; margin-top:16px; padding:10px 20px; border:1px solid #737300; border-radius:8px; background:#737300; color:#fff; font:inherit; cursor:pointer; }
+.retryButton:focus-visible { outline:3px solid #a6a66c; outline-offset:3px; }
